@@ -8,7 +8,14 @@ Metadata:
     - Utility Parameters
     - Tagging Parameters
     
-    Parameter attributes are ordered as follows: Description, Type, Default, (optional) AllowedValues/Patterns, Constraints, etc.
+    Parameter attributes are ordered as follows: 
+    - Description
+    - Type
+    - Default
+    (optional) 
+    - AllowedValues/Patterns
+    - Constraints
+    - etc.
 
 # END OF METADATA
 
