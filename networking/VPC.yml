@@ -12,87 +12,111 @@ Metadata:
 
 Parameters:
   # Utility Parameters
-  VPC_BaseCIDRblock:
+  VPCBaseCIDRblock:
     Description: CIDR Block for Base VPC network
     Type: String
     Default: 10.0.0.0/16
-    AllowedPatterns: 
-  VPC_AdminSubnetCIDRbits:
+    AllowedPattern: ^(1\d{1,2}|2[0-4]\d|25[0-5]|\d{1,2})\.(1\d{1,2}|2[0-4]\d|25[0-5]|\d{1,2})\.(1\d{1,2}|2[0-4]\d|25[0-5]|\d{1,2})\.(1\d{1,2}|2[0-4]\d|25[0-5]|\d{1,2})\/([1-9]|[12]\d|3[0-2])$
+  VPCBaseEnableDnsHostnames:
+    Description: Enable DNS hostnames for Base VPC network
+    Type: String
+    Default: true
+    AllowedValues:
+      - true
+      - false
+  VPCEnableDnsSupport:
+    Description: Enable DNS support for Base VPC network
+    Type: String
+    Default: true
+    AllowedValues:
+      - true
+      - false
+  VPCInstanceTenancy:
+    Description: Instance tenancy for Base VPC network
+    Type: String
+    Default: default
+    AllowedValues:
+      - default
+      - dedicated
+  VPCAdminSubnetCIDRbits:
     Description: Number of CIDR bits needed to populate AWS Admin Subnet (maximum 8 = 253 hosts, default 4 = 14 hosts)
     Type: Number
     Default: 4
-  VPC_ManagementSubnetCIDRbits:
+  VPCManagementSubnetCIDRbits:
     Description: Number of CIDR bits needed to populate Management Subnet (maximum 8 = 253 hosts, default 4 = 14 hosts)
     Type: Number
     Default: 4
-  VPC_MarketingSubnetCIDRbits:
+  VPCMarketingSubnetCIDRbits:
     Description: Number of CIDR bits needed to populate Marketing Subnet (maximum 8 = 253 hosts, default 4 = 14 hosts)
     Type: Number
     Default: 4
-  VPC_DevelopmentSubnetCIDRbits:
+  VPCDevelopmentSubnetCIDRbits:
     Description: Number of CIDR bits needed to populate Development Subnet (maximum 8 = 253 hosts, default 6 = 62 hosts)
     Type: Number
     Default: 6
 
   # Tagging Parameters
-  VPC_BaseNetworkName:
+  VPCBaseNetworkName:
     Description: Name of Base VPC network
     Type: String
     Default: net0
-  VPC_AdminSubnetName:
+  VPCAdminSubnetName:
     Description: Name of AWS Admin Subnet
     Type: String
     Default: admin-subnet
-  VPC_ManagementSubnetName:
+  VPCManagementSubnetName:
     Description: Name of Management Subnet
     Type: String
     Default: management-subnet
-  VPC_MarketingSubnetName:
+  VPCMarketingSubnetName:
     Description: Name of Marketing Subnet
     Type: String
     Default: marketing-subnet
-  VPC_DevelopmentSubnetName:
+  VPCDevelopmentSubnetName:
     Description: Name of Development Subnet
     Type: String
     Default: development-subnet
 
     
 Resources:
-  VPC_BaseNetwork:
+  VPCBaseNetwork:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: !Ref VPC_BaseCIDRblock
-      EnableDnsHostnames: !Ref VPC_BaseEnableDnsHostnames
-      EnableDnsSupport: !Ref VPC_EnableDnsSupport
-      InstanceTenancy: !Ref VPC_InstanceTenancy
+      CidrBlock: !Ref VPCBaseCIDRblock
+      EnableDnsHostnames: !Ref VPCBaseEnableDnsHostnames
+      EnableDnsSupport: !Ref VPCEnableDnsSupport
+      InstanceTenancy: !Ref VPCInstanceTenancy
       Tags:
+        - Key: Name
+          Value: !Ref VPCBaseNetworkName
 
-  VPC_BaseSubnet:
+  VPCAdminSubnet:
     Type: AWS::EC2::Subnet
-    DependsOn: VPC_BaseNetwork
     Properties:
+      VpcId: !Ref VPCBaseNetwork
       CidrBlock: !Select
         - 0
         - !Cidr
-          - !GetAtt VPC_BaseNetwork.CidrBlock
+          - !GetAtt VPCBaseNetwork.CidrBlock
           - 1
-          - !GetAtt VPC_BaseSubnetCIDRbits
+          - !Ref VPCAdminSubnetCIDRbits
+    DependsOn: VPCBaseNetwork
   
   
 
 Outputs:
   # Base Network Outputs
-  VPC_BaseNetworkARN:
+  VPCBaseNetworkARN:
     Description: Amazon Resource Number assigned to Base VPC Network.
-    Value: !GetAtt VPC_BaseNetwork.Arn
-  VPC_BaseNetworkCIDR:
+    Value: !GetAtt VPCBaseNetwork.Arn
+  VPCBaseNetworkCIDR:
     Description: The resulting CIDR block assigned to Base VPC Network.
-    Value: !GetAtt VPC_BaseNetwork.CidrBlock
+    Value: !GetAtt VPCBaseNetwork.CidrBlock
 
-  # Base Subnet Outputs
-  VPC_BaseSubnetARN:
-    Description: Amazon Resource Number assigned to Base Subnet.
-    Value: !GetAtt VPC_BaseSubnet.Arn
-  VPC_BaseSubnetCIDR:
-    Description: The resulting CIDR block assigned to Base Subnet.
-    Value: !GetAtt VPC_BaseSubnet.CidrBlock
+  # Admin Subnet Outputs
+  VPCAdminSubnetARN:
+    Description: Amazon Resource Number assigned to Admin Subnet.
+    Value: !GetAtt VPCAdminSubnet.Arn
+  VPCAdminSubnetCIDR:
+    Description: The resulting CIDR block assigned to Admin Subnet.
+    Value: !GetAtt VPCAdminSubnet.CidrBlock
