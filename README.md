@@ -6,6 +6,11 @@ For example, in most cases Parameters are alphabetically sorted in order to impr
 
 All parameters are prefaced with a namespace indicating the type of resource they are. This serves to better group them and makes understanding the template easier.
 
+Namespacing for all declarations follows the convention of: 
+- Resource
+- Environment
+- Specific Attributes
+
 At the top of each YAML template is the following:
 - AWSTemplateFormatVersion
 - Description (brief explanation of template for reference in CloudFormation console)
