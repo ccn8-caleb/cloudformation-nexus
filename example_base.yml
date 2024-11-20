@@ -4,7 +4,7 @@ Metadata:
   Authors: Caleb Wallace
   Description: >-
     2024-11-19, this template is a generic starting point for generating CloudFormation templates.
-    Parameters are in alphabetical order, separated into the following sections:
+    Parameters are in general alphabetical order where it improves readibility and searching. They are separated into the following sections:
     - Utility Parameters
     - Tagging Parameters
     
