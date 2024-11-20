@@ -1,0 +1,12 @@
+{
+    "Parameters": {
+        "CI_CodeDeployApplication": "",
+        "CI_CodePipelineName": "",
+        "EC2_InstanceRoleDefault": "",
+        "EC2_MaxInstances": "",
+        "EC2_MinInstances": "",
+        "EC2_SourceAMI": "",
+        "VPC_Subnet": "",
+        "VPC_NetworkName": ""
+    }
+}

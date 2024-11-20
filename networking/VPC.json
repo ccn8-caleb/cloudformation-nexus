@@ -1,0 +1,7 @@
+{
+    "Parameters": {
+        "VPC_BaseCIDRblock":"10.77.0.0/16",
+        "VPC_BaseNetworkName":"concatn8-net0"
+    }
+
+}

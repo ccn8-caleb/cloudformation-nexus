@@ -1,0 +1,98 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This template is a base CloudFormation Template for generating resources
+Metadata:
+  Authors: Caleb Wallace
+  Description: >-
+    2024-11-19, this template is a generic starting point for generating CloudFormation templates.
+    Parameters are in alphabetical order, separated into the following sections:
+    - Utility Parameters
+    - Tagging Parameters
+    
+    Parameter attributes are ordered as follows: Description, Type, Default, (optional) AllowedValues/Patterns, Constraints, etc.
+
+Parameters:
+  # Utility Parameters
+  VPC_BaseCIDRblock:
+    Description: CIDR Block for Base VPC network
+    Type: String
+    Default: 10.0.0.0/16
+    AllowedPatterns: 
+  VPC_AdminSubnetCIDRbits:
+    Description: Number of CIDR bits needed to populate AWS Admin Subnet (maximum 8 = 253 hosts, default 4 = 14 hosts)
+    Type: Number
+    Default: 4
+  VPC_ManagementSubnetCIDRbits:
+    Description: Number of CIDR bits needed to populate Management Subnet (maximum 8 = 253 hosts, default 4 = 14 hosts)
+    Type: Number
+    Default: 4
+  VPC_MarketingSubnetCIDRbits:
+    Description: Number of CIDR bits needed to populate Marketing Subnet (maximum 8 = 253 hosts, default 4 = 14 hosts)
+    Type: Number
+    Default: 4
+  VPC_DevelopmentSubnetCIDRbits:
+    Description: Number of CIDR bits needed to populate Development Subnet (maximum 8 = 253 hosts, default 6 = 62 hosts)
+    Type: Number
+    Default: 6
+
+  # Tagging Parameters
+  VPC_BaseNetworkName:
+    Description: Name of Base VPC network
+    Type: String
+    Default: net0
+  VPC_AdminSubnetName:
+    Description: Name of AWS Admin Subnet
+    Type: String
+    Default: admin-subnet
+  VPC_ManagementSubnetName:
+    Description: Name of Management Subnet
+    Type: String
+    Default: management-subnet
+  VPC_MarketingSubnetName:
+    Description: Name of Marketing Subnet
+    Type: String
+    Default: marketing-subnet
+  VPC_DevelopmentSubnetName:
+    Description: Name of Development Subnet
+    Type: String
+    Default: development-subnet
+
+    
+Resources:
+  VPC_BaseNetwork:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPC_BaseCIDRblock
+      EnableDnsHostnames: !Ref VPC_BaseEnableDnsHostnames
+      EnableDnsSupport: !Ref VPC_EnableDnsSupport
+      InstanceTenancy: !Ref VPC_InstanceTenancy
+      Tags:
+
+  VPC_BaseSubnet:
+    Type: AWS::EC2::Subnet
+    DependsOn: VPC_BaseNetwork
+    Properties:
+      CidrBlock: !Select
+        - 0
+        - !Cidr
+          - !GetAtt VPC_BaseNetwork.CidrBlock
+          - 1
+          - !GetAtt VPC_BaseSubnetCIDRbits
+  
+  
+
+Outputs:
+  # Base Network Outputs
+  VPC_BaseNetworkARN:
+    Description: Amazon Resource Number assigned to Base VPC Network.
+    Value: !GetAtt VPC_BaseNetwork.Arn
+  VPC_BaseNetworkCIDR:
+    Description: The resulting CIDR block assigned to Base VPC Network.
+    Value: !GetAtt VPC_BaseNetwork.CidrBlock
+
+  # Base Subnet Outputs
+  VPC_BaseSubnetARN:
+    Description: Amazon Resource Number assigned to Base Subnet.
+    Value: !GetAtt VPC_BaseSubnet.Arn
+  VPC_BaseSubnetCIDR:
+    Description: The resulting CIDR block assigned to Base Subnet.
+    Value: !GetAtt VPC_BaseSubnet.CidrBlock

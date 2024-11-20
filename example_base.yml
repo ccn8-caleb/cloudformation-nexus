@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This template is a base CloudFormation Template for generating resources
+Metadata:
+  Authors: Caleb Wallace
+  Description: >-
+    2024-11-19, this template is a generic starting point for generating CloudFormation templates.
+    Parameters are in alphabetical order, separated into the following sections:
+    - Utility Parameters
+    - Tagging Parameters
+    
+    Parameter attributes are ordered as follows: Description, Type, Default, (optional) AllowedValues/Patterns, Constraints, etc.
+
+# END OF METADATA
+
+Parameters:
+  # Utility Parameters
+
+
+  # Tagging Parameters
+
+
+# END OF PARAMETERS
+
+Resources:
+
+# END OF RESOURCES
+
+Outputs:
